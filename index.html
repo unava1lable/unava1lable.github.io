@@ -69,6 +69,78 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-CPU微架构" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/12/29/CPU%E5%BE%AE%E6%9E%B6%E6%9E%84/" class="article-date">
+  <time class="dt-published" datetime="2023-12-28T22:51:15.000Z" itemprop="datePublished">2023-12-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2023/12/29/CPU%E5%BE%AE%E6%9E%B6%E6%9E%84/">CPU微架构</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="指令集架构"><a href="#指令集架构" class="headerlink" title="指令集架构"></a>指令集架构</h2><p>指令集是软件用来与硬件通信的词汇集合，指令集架构(Instruction Set Architecture, ISA)定义了软件和硬件之间的通信协议</p>
+<h2 id="流水线"><a href="#流水线" class="headerlink" title="流水线"></a>流水线</h2><p>流水线是加快CPU速度的基础性技术，其中多条指令在执行过程中可以重叠。指令处理分为几个阶段，这些阶段并行运行，处理不同指令的不同部分。</p>
+<ol>
+<li>取指(Instruction Fetch, IF)</li>
+<li>译码(Instruction decode, ID)</li>
+<li>执行(EXE)</li>
+<li>访存(MEM access)</li>
+<li>写回(Write Back, WB)</li>
+</ol>
+<p><img src="/../images/pipeline.png"></p>
+<p>吞吐量(Throughput)：单位时间内完成和退出流水线的指令数。</p>
+<p>在理想情况下，流水线机器中每条指令的执行时间为非流水线机器中每条指令的执行时间除以流水线阶段数。</p>
+<p>实际实现中，流水线会引入几个约束，这些约束限制了理想模型。</p>
+<ul>
+<li>结构冒险(structural hazard): 由资源冲突导致。在很大程度上，可以通过复制硬件资源(如使用多端口寄存器或存储器)来消除。然而，要消除这些冒险，在芯片面积和功耗方面成本可能会变得非常高昂。</li>
+<li>数据冒险(data hazard):由程序中数据的依赖关系导致，可以分为3类<ol>
+<li>写后读(Read-After-Write, RAW)。当指令<code>x+1</code>在上一条指令<code>x</code>写入某个位置之前读取同一个位置时，就会发生这种冒险，从而导致读取错误的值。CPU通过实现从流水线后期阶段到早期阶段的数据转发(旁路)来减轻与RAW冒险相关的损失。这个想法是，在指令<code>x</code>完全完成之前，指令<code>x</code>的结果可以转发到指令<code>x+1</code>: <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">R1 = R0 ADD 1</span><br><span class="line">R2 = R1 ADD 2</span><br></pre></td></tr></table></figure>
+ 如果我们在<code>R0 ADD 1</code>完成后直接获取值(从EXE流水线阶段)，则无需等到WB阶段将该值写入寄存器后再获取。旁路有助于节约几个时钟周期，流水线越长，它越有效。</li>
+<li>读后写(Write-After-Read)。当指令<code>x+1</code>在上一条指令<code>x</code>读取某个位置之前写入相同的位置时，就会发生这种冒险，从而导致读取错误的值。这可以通过<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%AF%84%E5%AD%98%E5%99%A8%E9%87%8D%E5%91%BD%E5%90%8D">寄存器重命名</a>来消除。 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">R1 = R0 ADD 1</span><br><span class="line">R0 = R2 ADD 2</span><br></pre></td></tr></table></figure></li>
+<li>写后写(Write-After-Write, WAW)。当指令<code>x+1</code>在指令<code>x</code>写入某个位置之前写入相同位置时，就会发生这种冒险。可以通过寄存器重命名来消除。</li>
+</ol>
+</li>
+<li>控制冒险(control hazard): 由程序执行流程的变化而导致。它们产生于流水线分支指令和其他更改程序流程的指令。</li>
+</ul>
+<h2 id="利用指令级并行"><a href="#利用指令级并行" class="headerlink" title="利用指令级并行"></a>利用指令级并行</h2><p>因为程序中的大多数指令是独立的，所以都适合流水线化和并行执行。现代CPU实现了大量的附加硬件功能来利用这种指令级并行(Instruction Level Parallelism, ILP)。</p>
+<h3 id="乱序执行-Out-Of-Order-OOO"><a href="#乱序执行-Out-Of-Order-OOO" class="headerlink" title="乱序执行(Out-Of-Order, OOO)"></a>乱序执行(Out-Of-Order, OOO)</h3><p>大多数现代CPU都支持乱序执行，即顺序指令可以以任意顺序进入流水线的执行阶段，只受指令之间依赖关系的限制。指令在最终执行时称为退休(retire)。为确保正确性，CPU必须按程序顺序让所有指令退休。乱序执行主要用于避免因依赖引起的停顿而导致CPU资源利用率不足的问题，尤其是在超标量引擎中(Superscalar Engines)。<br><img src="/../images/out-of-order.png"></p>
+<h3 id="超标量引擎和超长指令字"><a href="#超标量引擎和超长指令字" class="headerlink" title="超标量引擎和超长指令字"></a>超标量引擎和超长指令字</h3><p>大多数现代CPU都是超标量的，也就是说，它们可以在一个时钟周期内发射多条指令。发射宽度是在同一个时钟周期内可以发射的最大指令数。目前CPU的典型发射宽度是2 ~ 6。为保持恰当的平衡，这种超标量引擎还支持多个执行单元和流水线执行单元。</p>
+<p><img src="/../images/superscalar_engine.png"></p>
+<p>Intel Itanium等架构使用一种叫超长指令字(Very Long Instruction Word, VLIW)的技术，将调度超标量和多执行单元处理器的负担从硬件转移到编译器。</p>
+<h3 id="投机执行-Speculative-Execution"><a href="#投机执行-Speculative-Execution" class="headerlink" title="投机执行(Speculative Execution)"></a>投机执行(Speculative Execution)</h3><p>如果指令在分支条件得到确定前停顿，控制冒险可能会导致流水线中显著的性能损失。硬件分支预测逻辑是一种避免这种性能损失的技术，用于预测分支的可能方向并从预测路径执行指令。<br>如</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (a &lt; b)</span><br><span class="line">    foo();</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    bar();</span><br></pre></td></tr></table></figure>
+<p>在不知道<code>a &lt; b</code>是真还是假的情况下，CPU会一直等待，知道分支指令的结果确定下来。</p>
+<p>通过投机执行，CPU会对分支判断的结果进行猜测。但是，有时可能预测不准确，在这种情况下，投机执行的结果必须被制止和丢弃，这被称为分支预测错误惩罚。</p>
+<p>为了跟踪投机执行的进度，CPU支持一种称为顺序重排缓冲区(ReOrder Buffer, ROB)的结构。ROB维护所有指令执行状态，并按顺序让指令退休。只有在其顺序与程序流一致且投机正确时，被投机结果才会被写入ROB并递交到架构寄存器。CPU还可以将投机执行与乱序执行结合起来，并使用ROB同时跟踪投机执行和乱序执行。<br><img src="/../images/speculative_execution.png"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/12/29/CPU%E5%BE%AE%E6%9E%B6%E6%9E%84/" data-id="clqrg7vtx0000n2glauoz81po" data-title="CPU微架构" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-性能测量" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2023/12/29/%E6%80%A7%E8%83%BD%E6%B5%8B%E9%87%8F/" class="article-date">
@@ -135,7 +207,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/12/29/%E6%80%A7%E8%83%BD%E6%B5%8B%E9%87%8F/" data-id="clqpssgbg0000t0gl6zifd862" data-title="性能测量" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2023/12/29/%E6%80%A7%E8%83%BD%E6%B5%8B%E9%87%8F/" data-id="clqrg7vu10001n2glafk8fz6c" data-title="性能测量" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -176,6 +248,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2023/12/29/CPU%E5%BE%AE%E6%9E%B6%E6%9E%84/">CPU微架构</a>
+          </li>
         
           <li>
             <a href="/2023/12/29/%E6%80%A7%E8%83%BD%E6%B5%8B%E9%87%8F/">性能测量</a>
