@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>导读 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="影响系统在默认情况下获取最佳性能的重要因素：  CPU的限制：现代CPU的执行速度非常快，但如果执行任务的指令不是最优的，CPU也无能为力，它只能盲目地执行被分配的任务，而不能把次优的代码转化为性能更好的代码。 编译器的限制：编译器要确保在所有可能的情况下让优化操作生成正确的机器码，所以编译器通常采取更保守的优化策略。此外，编译器通常不会改变程序使用的数据结构。 算法复杂度分析的限制：对于插入排序">
+<meta property="og:type" content="article">
+<meta property="og:title" content="导读">
+<meta property="og:url" content="http://example.com/2024/02/05/%E5%AF%BC%E8%AF%BB/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="影响系统在默认情况下获取最佳性能的重要因素：  CPU的限制：现代CPU的执行速度非常快，但如果执行任务的指令不是最优的，CPU也无能为力，它只能盲目地执行被分配的任务，而不能把次优的代码转化为性能更好的代码。 编译器的限制：编译器要确保在所有可能的情况下让优化操作生成正确的机器码，所以编译器通常采取更保守的优化策略。此外，编译器通常不会改变程序使用的数据结构。 算法复杂度分析的限制：对于插入排序">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-02-05T09:09:09.000Z">
+<meta property="article:modified_time" content="2024-02-05T12:29:29.389Z">
+<meta property="article:author" content="jerrry">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-导读" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/02/05/%E5%AF%BC%E8%AF%BB/" class="article-date">
+  <time class="dt-published" datetime="2024-02-05T09:09:09.000Z" itemprop="datePublished">2024-02-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      导读
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>影响系统在默认情况下获取最佳性能的重要因素：</p>
+<ol type="1">
+<li><p>CPU的限制：现代CPU的执行速度非常快，但如果执行任务的指令不是最优的，CPU也无能为力，它只能盲目地执行被分配的任务，而不能把次优的代码转化为性能更好的代码。</p></li>
+<li><p>编译器的限制：编译器要确保在所有可能的情况下让优化操作生成正确的机器码，所以编译器通常采取更保守的优化策略。此外，编译器通常不会改变程序使用的数据结构。</p></li>
+<li><p>算法复杂度分析的限制：对于插入排序和快速排序。前者的复杂度是<span
+class="math inline">\(O(n^2)\)</span>，后者的是<span
+class="math inline">\(O(nlogn)\)</span>。但在<span
+class="math inline">\(n\)</span>较小时，插入排序的表现更好。复杂度分析无法解释算法所有分支预测的影响，因此把他们封装成一个常数<span
+class="math inline">\(C\)</span>。</p></li>
+</ol>
+<hr />
+<p>进行性能分析时一定要<strong>进行测量</strong>。比如很多经验不丰富的开发者会用<code>i++</code>替换为<code>++i</code>（前提是<code>i</code>的前一个值不会被使用，如<code>arr[i++] = i * i;</code>之类的就不行），这样的改变通常没有效果，因为编译器会识别出<code>i</code>的前一个值没有被使用，并且会去除冗余的数据。</p>
+<p>如： <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// before</span></span><br><span class="line"><span class="type">int</span> arr[<span class="number">5</span>];</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) &#123;</span><br><span class="line">    arr[i] = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// after</span></span><br><span class="line"><span class="type">int</span> arr[<span class="number">5</span>];</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; ++i) &#123;</span><br><span class="line">    arr[i] = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在Compiler Explorer上生成的部分汇编代码（x86-64 gcc-13.2 -O0）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># before</span><br><span class="line">        # 这是i++</span><br><span class="line">        add     DWORD PTR [rbp-4], 1</span><br><span class="line"></span><br><span class="line"># after</span><br><span class="line">        # 这是++i</span><br><span class="line">        add     DWORD PTR [rbp-4], 1</span><br></pre></td></tr></table></figure>
+<p>可以看出没有变化。</p>
+<p>此外，有些人会过度使用传统的位处理技巧，比如基于xor的交换，但实际上简单的<code>std::swap</code>就能更快而且可读性更好。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2024/02/05/%E5%AF%BC%E8%AF%BB/" data-id="cls8wtfvp00002mgle1hh3lqv" data-title="导读" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/02/">February 2024</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2024/02/05/%E5%AF%BC%E8%AF%BB/">导读</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2024 jerrry<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>
